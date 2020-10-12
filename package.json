@@ -1,0 +1,19 @@
+{
+  "name": "huent",
+  "version": "1.0.0",
+  "description": "Small lib to fluently create/access html element and read/write their properties",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmonizer/huent.git"
+  },
+  "author": "Erik Suit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmonizer/huent/issues"
+  },
+  "homepage": "https://github.com/dmonizer/huent#readme"
+}
