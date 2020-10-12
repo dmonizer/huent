@@ -1,4 +1,4 @@
-const Huent = require('../src/Huent');
+const Huent = require('../src/huent');
 describe('Huent ...', () => {
     test('should return correct element', () => {
         const hf = new Huent('p').classes("test").done();
