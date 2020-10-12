@@ -4,7 +4,7 @@
   "description": "Small lib to fluently create/access html element and read/write their properties",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -15,5 +15,14 @@
   "bugs": {
     "url": "https://github.com/dmonizer/huent/issues"
   },
-  "homepage": "https://github.com/dmonizer/huent#readme"
+  "homepage": "https://github.com/dmonizer/huent#readme",
+  "devDependencies": {
+    "jest": "^26.5.3"
+  },
+  "jest": {
+    "verbose": true
+  },
+  "dependencies": {
+    "n": "^6.7.0"
+  }
 }
