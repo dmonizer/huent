@@ -1,6 +1,6 @@
 {
   "name": "huent",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Tiny 0-dependency library to fluently create/access/destroy html elements and read/write their properties",
   "main": "src/huent.js",
   "scripts": {
