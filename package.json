@@ -21,8 +21,5 @@
   },
   "jest": {
     "verbose": true
-  },
-  "dependencies": {
-    "n": "^6.7.0"
   }
 }
