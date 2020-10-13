@@ -1,8 +1,8 @@
 {
   "name": "huent",
   "version": "1.0.0",
-  "description": "Small lib to fluently create/access html element and read/write their properties",
-  "main": "index.js",
+  "description": "Tiny 0-dependency library to fluently create/access/destroy html elements and read/write their properties",
+  "main": "src/huent.js",
   "scripts": {
     "test": "jest --coverage"
   },
