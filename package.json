@@ -17,9 +17,14 @@
   },
   "homepage": "https://github.com/dmonizer/huent#readme",
   "devDependencies": {
-    "jest": "^26.5.3"
+    "jest": "^25"
   },
   "jest": {
     "verbose": true
+  },
+  "dependencies": {
+    "bufferutil": "^4.0.1",
+    "canvas": "^2.6.1",
+    "utf-8-validate": "^5.0.2"
   }
 }

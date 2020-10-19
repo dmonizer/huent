@@ -1,6 +1,10 @@
 /**
  Small "jquery like" object for creating and managing HTMLElements in fluent fashion - with minimal feature-set
  */
+const notImplemented = ["translate", "dir"];
+const specialCaseProperties = ["for"];
+const readOnlyProperties = ["offsetHeight", "offsetLeft", "offsetRight", "offsetWidth", "offsetTop", "offsetParent", "properties", "itemRef", "itemProp",
+"itemType", "dropzone", "isContentEditable"];
 
 function Huent(tag) {
     this.element = tag instanceof HTMLElement ? tag : document.createElement(tag);
@@ -27,25 +31,45 @@ Huent.find = function (selector) {
     }
     return new Huent(el);
 };
-
-
-Huent.prototype.createFluentSetterGetter = function (htmlProperty) {
-    function getElementDescriptor() {
+Huent.prototype._getElementDescriptor = function () {
         const el = this.element;
         return el.tagName
             + (el.className ? "." + el.className : "")
             + (el.id ? "#" + el.id : "")
+}
+
+Huent.prototype.createReadonlyGetter = function(htmlProperty) {
+    Huent.prototype[htmlProperty] = function (value) {
+        if (value !== undefined) {
+            throw new Error("Cannot assign value to readonly property '"+htmlProperty+"'");
+        }
+        return Huent.prototype[htmlProperty];
     }
+}
+
+Huent.prototype.createFluentSetterGetter = function (htmlProperty) {
+    if (Huent.prototype[htmlProperty] && typeof Huent.prototype[htmlProperty] === typeof (function(){})) {
+        throw new Error("Duplicate htmlProperty: "+htmlProperty);
+    }
+
     Huent.prototype[htmlProperty] = function (value) {
         if (this.element[htmlProperty] === undefined) {
-            throw new Error("incorrect getter/setter usage: element " + getElementDescriptor.call(this) + " does not have property \"" + htmlProperty+ "\"")
+            throw new Error("incorrect getter/setter usage: element " + this._getElementDescriptor.call(this) + " does not have property \"" + htmlProperty+ "\"")
         }
         if (typeof value === "undefined") {
             return this.element[htmlProperty]
         }
-        this.element[htmlProperty] = value;
+        switch (typeof this.element[htmlProperty]) {           
+           case "object" : if (typeof value === "object") {
+                                this.element[htmlProperty] = Object.assign(this.element[htmlProperty], value)
+                            };
+                            break;
+           default : this.element[htmlProperty] = value; 
+        } 
+        
         return this;
     };
+
 
     return Huent.prototype.createFluentSetterGetter;
 };
@@ -68,25 +92,43 @@ Huent.prototype.createSpecialFluentSetterGetter = function(htmlProperty) {
     return Huent.prototype.createSpecialFluentSetterGetter;
 };
 
+Huent.prototype.getNotImplemented = function() {
+    return notImplemented;
+}
+
+Huent.prototype.getSpecialCases = function() {
+    return specialCaseProperties;
+}
+
+Huent.prototype.getReadonlyProperties = function() {
+    return readOnlyProperties;
+}
+
 Huent.prototype.createAllSettersGetters = function () {
-    if (!Huent.prototype.name || typeof Huent.prototype.name !== "function") {
-        this.createFluentSetterGetter("name")
-        ("href")
-        ("type")
-        ("defaultChecked")
-        ("id")
-        ("innerText")
-        ("innerHTML")
-        ("src")
-        ("onclick")
-        ("onkeydown")
-        ("onkeyup")
-        ("selected")
-        ("checked")
-        ("value")
-        ("parentNode")
-        this.createSpecialFluentSetterGetter("for");
+    for (property in HTMLElement.prototype) { 
+        if (HTMLElement.prototype.hasOwnProperty(property) && !(notImplemented.includes(property))) {
+            if (readOnlyProperties.includes(property)) {
+                this.createReadonlyGetter(property)
+            } else if (specialCaseProperties.includes(property)) {
+                this.createSpecialFluentSetterGetter(property)
+            } else {
+                this.createFluentSetterGetter(property)
+            }
+        }
     }
+    this.createFluentSetterGetter("name")
+    ("href")
+    ("type")
+    ("defaultChecked")
+    ("id")
+    ("innerText")
+    ("innerHTML")
+    ("src")
+    ("selected")
+    ("checked")
+    ("value")
+    ("parentNode")
+    this.createSpecialFluentSetterGetter("for");
 };
 
 Huent.prototype.classes = function (classes) {
@@ -134,10 +176,10 @@ Huent.prototype.appendChild = function (child) {
     return this;
 };
 
-Huent.prototype.dataset = function (nameValuePairsObject) {
+/*Huent.prototype.dataset = function (nameValuePairsObject) {
     Object.assign(this.element.dataset, nameValuePairsObject);
     return this;
-};
+};*/
 
 Huent.prototype.appendToElement = function (parentElement) {
     (parentElement instanceof HTMLElement || parentElement instanceof Huent) && parentElement.appendChild

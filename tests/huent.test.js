@@ -36,13 +36,54 @@ describe('Huent ...', () => {
         expect(hf.id()).toStrictEqual(testName);
     });
 
+    test('test dataset', () => {
+        const testData = {"testName" : "testValue"}
+
+        const hf = new Huent('p');
+        hf.dataset(testData);
+        expect(JSON.stringify(hf.dataset())).toStrictEqual(JSON.stringify(testData));
+    });
+
+    
+
+    test('test all setters set and getters get', () => {
+        const returnsBoolean = ["hidden", "draggable"]
+        const testValue = "valueForTesting";
+        const hf = Huent.create('p');
+        for (i in HTMLElement.prototype) {
+            if (HTMLElement.prototype.hasOwnProperty(i) && !(hf.getNotImplemented().includes(i))) {
+                console.log(i)
+                if (returnsBoolean.includes(i)) {
+                    hf[i](false);
+                    expect(hf[i]()).toStrictEqual(false);
+                } else if (hf.getReadonlyProperties().includes(i)){
+                    /*const returnValue = hf[i]()
+                    console.log("!!!!!!!!!!!!!!!!"+returnValue)
+                    expect(returnValue).toBe(true).or().toBe(false);*/
+                } else{               
+                    hf[i](i);
+                    expect(hf[i]()).toStrictEqual(i);
+                }
+            }
+        }        
+    });
+    
     test('this.createFluentSetterGetter returns itself no matter how many times its called', () => {
         const hf = new Huent('p');
         expect(hf.createFluentSetterGetter("test")).toStrictEqual(hf.createFluentSetterGetter);
-        expect(hf.createFluentSetterGetter("test")("test2")("test3")).toStrictEqual(hf.createFluentSetterGetter);
+        expect(hf.createFluentSetterGetter("test1")("test2")("test3")).toStrictEqual(hf.createFluentSetterGetter);
 
     });
 
+   /* test("special cases", () => {
+        const hf = new Huent('p');
+        const testValue = "testValue";
+        hf.getSpecialCases().map((property)=>{
+            expect(hf[property](testValue)).toStrictEqual(hf[property])
+            expect(hf[property]()).toStrictEqual(testValue);
+        })
+    });
+*/
     test('incorrect setter (element P does not have "checked" property) should throw error, while for input, it should work', () => {
         const hfP = new Huent('p').classes("testclass").id("thisP");
         const hfInput = new Huent('input').classes("testclass").id("thisInput");
