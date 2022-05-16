@@ -38,14 +38,23 @@ describe('Huent ...', () => {
 
     test('this.createFluentSetterGetter returns itself no matter how many times its called', () => {
         const hf = new Huent('p');
-        expect(hf.createFluentSetterGetter("test")).toStrictEqual(hf.createFluentSetterGetter);
-        expect(hf.createFluentSetterGetter("test")("test2")("test3")).toStrictEqual(hf.createFluentSetterGetter);
+        
+        expect(hf.createFluentSetterGetter("test"))
+            .toStrictEqual(hf.createFluentSetterGetter);
+        
+        expect(hf.createFluentSetterGetter("test")("test2")("test3"))
+            .toStrictEqual(hf.createFluentSetterGetter);
 
     });
 
     test('incorrect setter (element P does not have "checked" property) should throw error, while for input, it should work', () => {
-        const hfP = new Huent('p').classes("testclass").id("thisP");
-        const hfInput = new Huent('input').classes("testclass").id("thisInput");
+        const hfP = new Huent('p')
+            .classes("testclass")
+            .id("thisP");
+        const hfInput = new Huent('input')
+            .classes("testclass")
+            .id("thisInput");
+        
         expect(() => {
             hfInput.checked(true);
         }).not.toThrow();
